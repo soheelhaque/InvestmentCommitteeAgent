@@ -1,26 +1,43 @@
+import json
 from .llm import run_llm
 
 
 def run_analyst(topic: str) -> dict:
+    """
+    Generates an investment thesis and search queries for a given topic.
+    """
+
     prompt = f"""
-You are an investment analyst in an investment committee. 
+You are an equity research analyst.
 
-Your job:
-1. Write a short investment thesis on {topic}
-2. Generate 3 web search queries to validate your thesis
+Your job is to produce:
+1. A concise investment thesis
+2. A list of search queries to gather more information
 
-Return in this format:
+Topic: {topic}
 
-THESIS:
-<your thesis>
+Return ONLY valid JSON in the following format:
 
-SEARCH QUERIES:
-1.
-2.
-3.
+{{
+    "thesis": "string - short investment view",
+    "queries": ["string", "string", "string"]
+}}
+
+Rules:
+- Return ONLY JSON. No markdown. No explanation. No backticks
+- Be specific and grounded in financial reasoning
+- Queries should be useful for real research (earnings, risks, competitors, macro factors)
+- Do not include any extra text outside JSON
 """
 
     response = run_llm(prompt)
-    return {
-        "raw": response
-    }
+
+    try:
+        return json.loads(response)
+    except json.JSONDecodeError:
+        return {
+            "thesis": "",
+            "queries": [],
+            "error": "Invalid JSON from LLM",
+            "raw": response
+        }
