@@ -10,7 +10,10 @@ def main():
         print("No topic provided. Exiting.")
         return
 
-    result = run_committee(topic)
+    result = run_committee(
+        topic,
+        trace=True
+    )
 
     print("\n=== RESULTS ===\n")
 

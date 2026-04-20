@@ -3,6 +3,9 @@ name = "investmentcommitteeagent"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
+    "langchain>=1.2.15",
+    "langchain-openai>=1.1.15",
+    "python-dotenv>=1.2.2",
     "ruff>=0.15.10",
 ]
 

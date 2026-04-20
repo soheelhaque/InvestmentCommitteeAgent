@@ -2,28 +2,34 @@ from investment_committee_agent.analyst import run_analyst
 from investment_committee_agent.risk import run_risk
 from investment_committee_agent.cio import run_cio
 
-def run_committee(topic: str) -> dict:
-    """
-    Orchestrates the investment committee workflow:
-    Analyst → Risk → CIO
-    """
 
-    # Step 1: Analyst
+def run_committee(topic: str, trace: bool = False) -> dict:
+    if trace:
+        print(f"\n[START] Topic: {topic}\n")
+
+    if trace:
+        print("[Analyst] running...")
     analyst_output = run_analyst(topic)
+    if trace:
+        print("[Analyst] done\n")
 
-    # Step 2: Risk
+    if trace:
+        print("[Risk] running...")
     risk_output = run_risk(topic)
+    if trace:
+        print("[Risk] done\n")
 
-    # Step 3: CIO
-    cio_output = run_cio(
-        topic=topic,
-        analyst_output=analyst_output,
-        risk_output=risk_output
-    )
+    if trace:
+        print("[CIO] running...")
+    cio_output = run_cio(topic, analyst_output, risk_output)
+    if trace:
+        print("[CIO] done\n")
 
-    return {
+    result = {
         "topic": topic,
         "analyst": analyst_output,
         "risk": risk_output,
         "cio": cio_output
     }
+
+    return result
